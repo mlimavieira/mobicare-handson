@@ -7,13 +7,6 @@
 	</parent>
 	<artifactId>aws-elastic-cache</artifactId>
 
-
-	<properties>
-		<start-class>hello.Application</start-class>
-	</properties>
-
-
-
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -32,9 +25,7 @@
 			<artifactId>spring-data-commons</artifactId>
 		</dependency>
 
-
 	</dependencies>
-
 
 	<build>
 		<plugins>
