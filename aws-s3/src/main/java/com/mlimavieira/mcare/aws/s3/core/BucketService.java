@@ -9,8 +9,12 @@ import org.springframework.util.StringUtils;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CreateBucketRequest;
 import com.amazonaws.services.s3.model.DeleteBucketRequest;
+import com.amazonaws.services.s3.model.GetObjectRequest;
+import com.amazonaws.services.s3.model.ListObjectsRequest;
+import com.amazonaws.services.s3.model.ObjectListing;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.S3Object;
 
 @Component
 public class BucketService {
@@ -57,12 +61,17 @@ public class BucketService {
 		clientS3.putObject(request);
 	}
 
-	public void getObject() {
+	public S3Object getObject(final String bucketName, final String objectKey) {
 
+		final GetObjectRequest getObjectRequest = new GetObjectRequest(bucketName, objectKey);
+		return clientS3.getObject(getObjectRequest);
 	}
 
-	public void listObjects() {
+	public ObjectListing listObjects(final String bucketName) {
+		final ListObjectsRequest listObjectsRequest = new ListObjectsRequest();
+		listObjectsRequest.withBucketName(bucketName);
 
+		return clientS3.listObjects(listObjectsRequest);
 	}
 
 	public void deleteObject() {
