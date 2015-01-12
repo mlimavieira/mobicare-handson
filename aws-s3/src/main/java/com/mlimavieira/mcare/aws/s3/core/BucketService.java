@@ -9,6 +9,7 @@ import org.springframework.util.StringUtils;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CreateBucketRequest;
 import com.amazonaws.services.s3.model.DeleteBucketRequest;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.ListObjectsRequest;
 import com.amazonaws.services.s3.model.ObjectListing;
@@ -22,6 +23,15 @@ public class BucketService {
 	@Autowired
 	private AmazonS3Client clientS3;
 
+
+	public boolean bucketExists(String bucketName) {
+		if (StringUtils.isEmpty(bucketName)) {
+			throw new IllegalArgumentException("BucketName is required");
+		}
+
+		final String bucketLocation = clientS3.getBucketLocation(bucketName);
+		return !StringUtils.isEmpty(bucketLocation);
+	}
 	public void createBucket(final String bucketName) {
 
 		if (StringUtils.isEmpty(bucketName)) {
@@ -42,8 +52,7 @@ public class BucketService {
 		clientS3.deleteBucket(bucketRequest);
 	}
 
-	public void putObject(final String bucketName, final String objectName, final byte[] bytes,
-			final String contentType) {
+	public void putObject(final String bucketName, final String objectName, final byte[] bytes, final String contentType) {
 
 		if (bytes.length == 0) {
 			throw new IllegalArgumentException("The parameter Bytes must be specified");
@@ -55,8 +64,7 @@ public class BucketService {
 		}
 		metadata.setContentLength(bytes.length);
 
-		final PutObjectRequest request = new PutObjectRequest(bucketName, objectName,
-				new ByteArrayInputStream(bytes), metadata);
+		final PutObjectRequest request = new PutObjectRequest(bucketName, objectName, new ByteArrayInputStream(bytes), metadata);
 
 		clientS3.putObject(request);
 	}
@@ -68,14 +76,16 @@ public class BucketService {
 	}
 
 	public ObjectListing listObjects(final String bucketName) {
+
 		final ListObjectsRequest listObjectsRequest = new ListObjectsRequest();
 		listObjectsRequest.withBucketName(bucketName);
 
 		return clientS3.listObjects(listObjectsRequest);
 	}
 
-	public void deleteObject() {
-
+	public void deleteObject(String bucketName, String objectName) {
+		final DeleteObjectRequest deleteObjectRequest = new DeleteObjectRequest(bucketName, objectName);
+		clientS3.deleteObject(deleteObjectRequest);
 	}
 
 }
