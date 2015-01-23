@@ -16,15 +16,10 @@ import com.mlimavieira.mcare.aws.s3.S3Sample;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = S3Sample.class)
-public class BucketServiceTest {
-
-	@Autowired
-	private BucketService bucketService;
+public class ObjectServiceTest {
 
 	@Autowired
 	private ObjectService objectService;
-
-	private String defaultBucketName;
 
 	private String testBucketName;
 
@@ -32,10 +27,8 @@ public class BucketServiceTest {
 	public void beforeTest() {
 
 		BasicConfigurator.configure();
-		defaultBucketName = RandomStringUtils.randomAlphabetic(10).toLowerCase();
 		testBucketName = RandomStringUtils.randomAlphabetic(10).toLowerCase();
 
-		bucketService.createBucket(testBucketName);
 	}
 
 	@After
@@ -46,18 +39,12 @@ public class BucketServiceTest {
 			objectService.deleteObject(row.getBucketName(), row.getKey());
 		}
 
-		bucketService.deleteBucket(testBucketName);
 	}
 
 	@Test
-	public void createBucket() {
+	public void putObject() {
 
-		bucketService.createBucket(defaultBucketName);
-	}
+		objectService.putObject(testBucketName, "teste.txt", "TESTE TESTE".getBytes(), "application/text");
 
-	@Test
-	public void deleteBucket() {
-
-		bucketService.createBucket(defaultBucketName);
 	}
 }

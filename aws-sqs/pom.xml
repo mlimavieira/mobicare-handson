@@ -7,8 +7,6 @@
 	</parent>
 	<artifactId>aws-sqs</artifactId>
 
-
-
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -40,5 +38,4 @@
 		</plugins>
 	</build>
 
-</project>
 </project>
